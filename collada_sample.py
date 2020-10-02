@@ -21,12 +21,12 @@ def main():
     mesh.effects.append(effect)
     mesh.materials.append(mat)
 
-    vert_floats = [
+    vert_floats = numpy.array([
         -50, 50, 50, 50, 50, 50, -50, -50, 50, 50,
         -50, 50, -50, 50, -50, 50, 50, -50, -50, -50,
         -50, 50, -50, -50
-    ]
-    normal_floats = [
+    ])
+    normal_floats = numpy.array([
         0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
         0, 1, 0, 1, 0, 0, 1, 0, 0, 1,
         0, 0, 1, 0, 0, -1, 0, 0, -1, 0,
@@ -35,13 +35,10 @@ def main():
         0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
         0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
         0, -1
-    ]
-    vert_src = source.FloatSource(
-        'cubeverts-array', numpy.array(vert_floats), ('X', 'Y', 'Z'))
-    normal_src = source.FloatSource(
-        'cubenormals-array', numpy.array(normal_floats), ('X', 'Y', 'Z'))
-
-    geom = geometry.Geometry(mesh, 'geometry0', 'mycube', [vert_src, normal_src])
+    ])
+    componests = ('X', 'Y', 'Z')
+    vert_src = source.FloatSource('cubeverts-array', vert_floats, componests)
+    normal_src = source.FloatSource('cubenormals-array', normal_floats, componests)
 
     input_list = source.InputList()
     input_list.addInput(0, 'VERTEX', '#cubeverts-array')
@@ -58,6 +55,7 @@ def main():
         4, 23
     ])
 
+    geom = geometry.Geometry(mesh, 'geometry0', 'mycube', [vert_src, normal_src])
     triset = geom.createTriangleSet(indices, input_list, 'materialref')
     geom.primitives.append(triset)
     mesh.geometries.append(geom)
@@ -70,7 +68,7 @@ def main():
     mesh.scenes.append(myscene)
     mesh.scene = myscene
 
-    mesh.write('sample.dae')
+    mesh.write('collada_sample.dae')
 
 
 if __name__ == '__main__':
